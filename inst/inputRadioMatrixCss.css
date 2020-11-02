@@ -6,6 +6,7 @@ td, th {
   padding: 10px;
   text-emphasis: center;
   vertical-align: middle;
+  width: auto;
 }
 th:empty {
   border: 0;
