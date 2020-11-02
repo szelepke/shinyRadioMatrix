@@ -71,7 +71,7 @@ generateRadioRow <- function(rowId, rowLabel, rowName, choiceNames, choiceValues
 #' @noRd
 
 generateRadioMatrixHeader <- function(choiceNames){
-  header <- lapply(c("", choiceNames, ""), function(n){
+  header <- lapply(c("", "", choiceNames), function(n){
     shiny::tags$td(n)
   })
 
