@@ -24,7 +24,7 @@ library(shiny)
 ui <- fluidPage(
 
   radioMatrixInput(inputId = "rmi", rowIds = letters[1:16],
-                   minLabels = letters[1:16], maxLabels = LETTERS[1:16],
+                   rowLabels = letters[1:16], rowNames = LETTERS[1:16],
                    choices = 1:10,
                    selected = rep(c(1,2), each = 8)),
   verbatimTextOutput('debug')
