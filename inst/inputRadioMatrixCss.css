@@ -1,0 +1,14 @@
+table {
+  border-collapse: collapse;
+}
+td, th {
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+th:empty {
+  border: 0;
+}
+
+.shiny-radiomatrix-row:nth-child(even){
+ background-color: #c3e8f7;
+}
