@@ -4,7 +4,7 @@
 \alias{radioMatrixInput}
 \title{Create radioMatrixInput}
 \usage{
-radioMatrixInput(inputId, rowIds, minLabels, maxLabels, choices = NULL,
+radioMatrixInput(inputId, rowIds, rowLabels, rowNames, choices = NULL,
   selected = NULL, choiceNames = NULL, choiceValues = NULL)
 }
 \arguments{
