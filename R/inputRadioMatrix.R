@@ -5,8 +5,8 @@
 #'   has selected. It will be put into the \code{name} attribute of the
 #'   corresponding \code{<tr>} tag, as well as in the \code{name} attributes of
 #'   the radio button inputs in this row.
-#' @param minLabel,maxLabel character. Displayed labels of the leftmost and
-#'   rightmost points of the row
+#' @param rowLabel character. Displayed col label
+#' @param rowName character. Displayed col name of the leftmost
 #' @param choiceNames,choiceValues as in radioButtons. Repeated here: List of
 #'   names and values, respectively, that are displayed to the user in the app
 #'   and correspond to the each choice (for this reason, choiceNames and
@@ -28,7 +28,7 @@
 #'
 #' @noRd
 
-generateRadioRow <- function(rowId, minLabel, maxLabel, choiceNames, choiceValues,
+generateRadioRow <- function(rowId, rowLabel, rowName, choiceNames, choiceValues,
                              selected = NULL, labelsWidth = list(NULL,NULL)){
 
 
@@ -52,9 +52,9 @@ generateRadioRow <- function(rowId, minLabel, maxLabel, choiceNames, choiceValue
     style <- paste0(style, "max-width:", labelsWidth[[2]],";")
   }
 
-  row_dat <- list(if (is.null(style)) shiny::tags$td(minLabel) else shiny::tags$td(minLabel, style = style),
-               row_dat,
-              if (is.null(style)) shiny::tags$td(maxLabel) else shiny::tags$td(maxLabel, style = style))
+  row_dat <- list(if (is.null(style)) shiny::tags$td(rowLabel) else shiny::tags$td(rowLabel, style = style),
+              if (is.null(style)) shiny::tags$td(rowName) else shiny::tags$td(rowName, style = style),
+              row_dat)
 
   shiny::tags$tr(name = rowId,
                  class = "shiny-radiomatrix-row", # used for CSS styling
@@ -86,7 +86,7 @@ generateRadioMatrixHeader <- function(choiceNames){
 #'   values that the user has selected. In the output, the component will return
 #'   a named list of values, each name corresponding to the row id, and the
 #'   value - to the value user has selected in this row.
-#' @param minLabels,maxLabels character. Vectors of displayed labels of the
+#' @param rowLabels,rowNames character. Vectors of displayed labels of the
 #'   leftmost and rightmost points of each row
 #' @param selected either \code{NULL} (default) or a vector of values which
 #'   should be selected when the component is created
@@ -109,7 +109,7 @@ generateRadioMatrixHeader <- function(choiceNames){
 #'
 #' @noRd
 
-generateRadioMatrix <- function (inputId, rowIds, minLabels, maxLabels,
+generateRadioMatrix <- function (inputId, rowIds, rowLabels, rowNames,
                                  choiceNames = NULL, choiceValues = NULL,
                                  selected = NULL,
                                  labelsWidth = list(NULL,NULL),
@@ -117,7 +117,7 @@ generateRadioMatrix <- function (inputId, rowIds, minLabels, maxLabels,
 
   header <- generateRadioMatrixHeader(choiceNames)
   rows <- lapply(1:length(rowIds), function(i){
-    generateRadioRow(rowId = rowIds[[i]], minLabel = minLabels[[i]], maxLabel = maxLabels[[i]],
+    generateRadioRow(rowId = rowIds[[i]], rowLabel = rowLabels[[i]], rowName = rowNames[[i]],
                      choiceNames = choiceNames, choiceValues = choiceValues,
                      selected = if (is.null(selected)) selected else selected[[i]],
                      labelsWidth = labelsWidth)
@@ -128,18 +128,18 @@ generateRadioMatrix <- function (inputId, rowIds, minLabels, maxLabels,
   shiny::div(class = "shiny-radiomatrix", table)
 }
 
-validateParams <- function(rowIds, minLabels, maxLabels, selected, choiceNames, labelsWidth){
+validateParams <- function(rowIds, rowLabels, rowNames, selected, choiceNames, labelsWidth){
 
   if (is.null(selected)){
-    checks <- list(rowIds, minLabels, maxLabels)
+    checks <- list(rowIds, rowLabels, rowNames)
   } else {
-    checks <- list(rowIds, minLabels, maxLabels, selected)
+    checks <- list(rowIds, rowLabels, rowNames, selected)
   }
 
   lengths <- sapply(checks, length)
 
   if (length(unique(lengths)) > 1) {
-    stop("All of rowIds, minLabels, maxLabels, selected should be of the same length!")
+    stop("All of rowIds, rowLabels, rowNames, selected should be of the same length!")
   }
 
   if (length(rowIds) < 1 ){
@@ -176,7 +176,7 @@ validateParams <- function(rowIds, minLabels, maxLabels, selected, choiceNames, 
 #'   values that the user has selected. In the output, the component will return
 #'   a named list of values, each name corresponding to the row id, and the
 #'   value - to the value user has selected in this row.
-#' @param minLabels,maxLabels character. Vectors of displayed labels of the
+#' @param rowLabels,rowNames character. Vectors of displayed labels of the
 #'   leftmost and rightmost points of each row
 #' @param choices List of values to select from (if elements of the list are
 #'   named then that name rather than the value is displayed to the user). If
@@ -202,18 +202,18 @@ validateParams <- function(rowIds, minLabels, maxLabels, selected, choiceNames, 
 #' @return HTML markup for radioMatrixInput
 #' @export
 
-radioMatrixInput <- function(inputId, rowIds, minLabels, maxLabels, choices = NULL,
+radioMatrixInput <- function(inputId, rowIds, rowLabels, rowNames, choices = NULL,
                              selected = NULL, choiceNames = NULL, choiceValues = NULL,
                              labelsWidth = list(NULL,NULL)) {
 
   # check the inputs
   args <- shiny:::normalizeChoicesArgs(choices, choiceNames, choiceValues)
   selected <- shiny:::restoreInput(id = inputId, default = selected)
-  validateParams(rowIds, minLabels, maxLabels, selected, args$choiceNames,labelsWidth)
+  validateParams(rowIds, rowLabels, rowNames, selected, args$choiceNames,labelsWidth)
 
   # generate the HTML for the controller itself
   radiomatrix <- generateRadioMatrix(inputId = inputID, rowIds = rowIds,
-                                     minLabels = minLabels, maxLabels = maxLabels,
+                                     rowLabels = rowLabels, rowNames = rowNames,
                                      selected = selected,
                                      choiceNames = args$choiceNames, choiceValues = args$choiceValues,
                                      labelsWidth = labelsWidth)
