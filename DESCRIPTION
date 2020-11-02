@@ -1,7 +1,7 @@
 Package: shinyRadioMatrix
 Type: Package
 Title: R Shiny input: matrix of radio buttons
-Version: 0.1.0
+Version: 0.1.2
 Author: Zsolt Szelepcsenyi
 Maintainer: Zsolt Szelepcseny <szelepcsenyi.zsolt@evista.hu>
 Description: An input controller for R Shiny: a matrix of radio buttons,
