@@ -29,7 +29,7 @@
 #' @noRd
 
 generateRadioRow <- function(rowId, rowLabel, rowName, choiceNames, choiceValues,
-                             selected = NULL, labelsWidth = list(NULL,NULL), headerRow = list("ID", "Basic Evaluation Index")){
+                             selected = NULL, labelsWidth = list(NULL,NULL), headerRow = list(NULL, NULL)){
 
 
   row_dat <- mapply(choiceNames, choiceValues, FUN = function(name, value){
@@ -70,7 +70,7 @@ generateRadioRow <- function(rowId, rowLabel, rowName, choiceNames, choiceValues
 #'
 #' @noRd
 
-generateRadioMatrixHeader <- function(choiceNames, headerRow = list("ID", "Basic Evaluation Index")){
+generateRadioMatrixHeader <- function(choiceNames, headerRow = list(NULL, NULL)){
   if(is.null(headerRow[[1]])){
     headerRowLabelOne = "ID"
   } else {
@@ -124,7 +124,7 @@ generateRadioMatrix <- function (inputId, rowIds, rowLabels, rowNames,
                                  selected = NULL,
                                  labelsWidth = list(NULL,NULL),
                                  session = getDefaultReactiveDomain(),
-                                 headerRow = list("ID", "Basic Evaluation Index")){
+                                 headerRow = list(NULL, NULL)){
 
   header <- generateRadioMatrixHeader(choiceNames, headerRow)
   rows <- lapply(1:length(rowIds), function(i){
@@ -215,7 +215,7 @@ validateParams <- function(rowIds, rowLabels, rowNames, selected, choiceNames, l
 
 radioMatrixInput <- function(inputId, rowIds, rowLabels, rowNames, choices = NULL,
                              selected = NULL, choiceNames = NULL, choiceValues = NULL,
-                             labelsWidth = list(NULL,NULL), headerRow = list("ID", "Basic Evaluation Index")) {
+                             labelsWidth = list(NULL,NULL), headerRow = list(NULL, NULL)) {
 
   # check the inputs
   args <- shiny:::normalizeChoicesArgs(choices, choiceNames, choiceValues)
