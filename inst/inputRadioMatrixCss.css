@@ -37,8 +37,3 @@ th:empty {
   width: 1px;
   white-space: nowrap;
 }
-
-.shiny-input-container:not(.shiny-input-container-inline) {
-  width: inherit;
-  max-width: inherit;
-}
