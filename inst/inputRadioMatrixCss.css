@@ -15,3 +15,19 @@ th:empty {
 .shiny-radiomatrix-row:nth-child(even){
  background-color: #f9f9f9;
 }
+
+.dataTable-container table {
+  width: 100%;
+  margin: 0 auto;
+  clear: both;
+  border-collapse: separate;
+  border-spacing: 0;
+  display: table;
+  background-color: transparent;
+  box-sizing: content-box;
+}
+
+.dataTable-container table th,
+.dataTable-container table td {
+  box-sizing: content-box;
+}
