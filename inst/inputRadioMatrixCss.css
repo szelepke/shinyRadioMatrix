@@ -31,3 +31,14 @@ th:empty {
 .dataTable-container table td {
   box-sizing: content-box;
 }
+
+.dataTable-container table td:nth-child(1),
+.dataTable-container table td:nth-child(2) {
+  width: 1px;
+  white-space: nowrap;
+}
+
+.shiny-input-container:not(.shiny-input-container-inline) {
+  width: inherit;
+  max-width: inherit;
+}
