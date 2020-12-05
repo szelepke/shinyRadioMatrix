@@ -217,7 +217,7 @@ radioMatrixInput <- function(inputId, rowIds, rowLabels, rowNames, choices = NUL
                                      rowLabels = rowLabels, rowNames = rowNames,
                                      selected = selected,
                                      choiceNames = args$choiceNames, choiceValues = args$choiceValues,
-                                     labelsWidth = labelsWidth)
+                                     labelsWidth = labelsWidth, headerRow = headerRow)
 
   divClass <- "form-group shiny-radiomatrix-container dataTable-container"
 

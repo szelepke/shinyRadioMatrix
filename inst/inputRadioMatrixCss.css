@@ -38,13 +38,6 @@
   text-align: left;
 }
 
-.dataTable-container table tr:nth-child(1) td:nth-child(1):before {
-  content: 'ID';
-}
-.dataTable-container table tr:nth-child(1) td:nth-child(2):before {
-  content: 'Basic Evaluation Index';
-}
-
 .dataTable-container table tr:nth-child(1) {
   font-weight: bold;
 }
