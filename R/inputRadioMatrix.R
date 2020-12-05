@@ -71,7 +71,17 @@ generateRadioRow <- function(rowId, rowLabel, rowName, choiceNames, choiceValues
 #' @noRd
 
 generateRadioMatrixHeader <- function(choiceNames, headerRow = list("ID", "Basic Evaluation Index")){
-  header <- lapply(c(headerRow[[1]], headerRow[[2]], choiceNames), function(n){
+  if(is.null(headerRow[[1]])){
+    headerRowLabelOne = "ID"
+  } else {
+    headerRowLabelOne = headerRow[[1]]
+  }
+  if(!is.null(headerRow[[2]])){
+    headerRowLabelTwo = "Basic Evaluation Index"
+  } else {
+    headerRowLabelTwo = headerRow[[2]]
+  }
+  header <- lapply(c(headerRowLabelOne, headerRowLabelTwo, choiceNames), function(n){
     shiny::tags$td(n)
   })
 
