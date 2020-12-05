@@ -76,7 +76,7 @@ generateRadioMatrixHeader <- function(choiceNames, headerRow = list("ID", "Basic
   } else {
     headerRowLabelOne = headerRow[[1]]
   }
-  if(!is.null(headerRow[[2]])){
+  if(is.null(headerRow[[2]])){
     headerRowLabelTwo = "Basic Evaluation Index"
   } else {
     headerRowLabelTwo = headerRow[[2]]
