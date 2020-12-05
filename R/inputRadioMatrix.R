@@ -70,7 +70,7 @@ generateRadioRow <- function(rowId, rowLabel, rowName, choiceNames, choiceValues
 #'
 #' @noRd
 
-generateRadioMatrixHeader <- function(choiceNames, headerRow){
+generateRadioMatrixHeader <- function(choiceNames, headerRow = list("ID", "Basic Evaluation Index")){
   header <- lapply(c(headerRow[[1]], headerRow[[2]], choiceNames), function(n){
     shiny::tags$td(n)
   })
@@ -113,14 +113,15 @@ generateRadioMatrix <- function (inputId, rowIds, rowLabels, rowNames,
                                  choiceNames = NULL, choiceValues = NULL,
                                  selected = NULL,
                                  labelsWidth = list(NULL,NULL),
-                                 session = getDefaultReactiveDomain()){
+                                 session = getDefaultReactiveDomain(),
+                                 headerRow = list("ID", "Basic Evaluation Index")){
 
-  header <- generateRadioMatrixHeader(choiceNames)
+  header <- generateRadioMatrixHeader(choiceNames, headerRow)
   rows <- lapply(1:length(rowIds), function(i){
     generateRadioRow(rowId = rowIds[[i]], rowLabel = rowLabels[[i]], rowName = rowNames[[i]],
                      choiceNames = choiceNames, choiceValues = choiceValues,
                      selected = if (is.null(selected)) selected else selected[[i]],
-                     labelsWidth = labelsWidth)
+                     labelsWidth = labelsWidth, headerRow = headerRow)
   })
 
   table <- shiny::tags$table(header, rows)
@@ -204,7 +205,7 @@ validateParams <- function(rowIds, rowLabels, rowNames, selected, choiceNames, l
 
 radioMatrixInput <- function(inputId, rowIds, rowLabels, rowNames, choices = NULL,
                              selected = NULL, choiceNames = NULL, choiceValues = NULL,
-                             labelsWidth = list(NULL,NULL)) {
+                             labelsWidth = list(NULL,NULL), headerRow = list("ID", "Basic Evaluation Index")) {
 
   # check the inputs
   args <- shiny:::normalizeChoicesArgs(choices, choiceNames, choiceValues)
