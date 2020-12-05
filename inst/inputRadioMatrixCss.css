@@ -1,6 +1,4 @@
-table {
-  border-collapse: collapse;
-}
+
 .dataTable-container table td,
 .dataTable-container table th {
   border: 0;
@@ -37,13 +35,14 @@ table {
 .dataTable-container table td:nth-child(2) {
   width: 1px;
   white-space: nowrap;
+  text-align: left;
 }
 
 .dataTable-container table tr:nth-child(1) td:nth-child(1):before {
   content: 'ID';
 }
 .dataTable-container table tr:nth-child(1) td:nth-child(2):before {
-  content: 'Basic Evaluation Indices';
+  content: 'Basic Evaluation Index';
 }
 
 .dataTable-container table tr:nth-child(1) {
