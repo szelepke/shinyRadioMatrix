@@ -1,18 +1,19 @@
 table {
   border-collapse: collapse;
 }
-td, th {
-  border: 1px solid #ccc;
+.dataTable-container table td,
+.dataTable-container table th {
+  border: 0;
   padding: 10px;
-  text-emphasis: center;
+  text-align: center;
   vertical-align: middle;
   width: auto;
 }
-th:empty {
+.dataTable-container table th:empty {
   border: 0;
 }
 
-.shiny-radiomatrix-row:nth-child(even){
+.shiny-radiomatrix-row:nth-child(even) {
  background-color: #f9f9f9;
 }
 
@@ -36,4 +37,15 @@ th:empty {
 .dataTable-container table td:nth-child(2) {
   width: 1px;
   white-space: nowrap;
+}
+
+.dataTable-container table tr:nth-child(1) td:nth-child(1):before {
+  content: 'ID';
+}
+.dataTable-container table tr:nth-child(1) td:nth-child(2):before {
+  content: 'Basic Evaluation Indices';
+}
+
+.dataTable-container table tr:nth-child(1) {
+  font-weight: bold;
 }
