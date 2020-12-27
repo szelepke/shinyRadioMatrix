@@ -1,12 +1,12 @@
 #' Creates a single row for radioMatrixInput
 #'
-#' @param rowId character Arbitrary id for the row. It should be unique within a
+#' @param rowID character. Arbitrary id for the row. It should be unique within a
 #'   given radioMatrixInput, since it is used when identifying the value user
 #'   has selected. It will be put into the \code{name} attribute of the
 #'   corresponding \code{<tr>} tag, as well as in the \code{name} attributes of
 #'   the radio button inputs in this row.
-#' @param rowLabel character. Displayed col label
-#' @param rowName character. Displayed col name of the leftmost
+#' @param rowLLabel character. Displayed labels of the leftmost points of the row.
+#' @param rowRLabel character. Displayed labels of the rightmost points of the row.
 #' @param choiceNames,choiceValues as in radioButtons. Repeated here: List of
 #'   names and values, respectively, that are displayed to the user in the app
 #'   and correspond to the each choice (for this reason, choiceNames and
@@ -21,26 +21,28 @@
 #'   the width itself and the unit, e.g. "20px", and will be written to the
 #'   \code{style} attribute of the labels \code{td} tags.
 #' @param selected either NULL (defualt) or the name of the value which should
-#'   be selected when the component is created
+#'   be selected when the component is created.
 #'
 #' @return HTML markup for a table row with radio buttons inputs inside each
 #'   cell
 #'
+#' @keyword internal
+#'
 #' @noRd
-
-generateRadioRow <- function(rowId, rowLabel, rowName, choiceNames, choiceValues,
-                             selected = NULL, labelsWidth = list(NULL,NULL), headerRow = list(NULL, NULL)){
+#'
+generateRadioRow <- function(rowID, rowLLabel, rowRLabel, choiceNames, choiceValues,
+                             selected = NULL, labelsWidth = list(NULL, NULL)){
 
 
   row_dat <- mapply(choiceNames, choiceValues, FUN = function(name, value){
 
-    inputTag <- shiny::tags$input(type = "radio", name = rowId,
+    inputTag <- shiny::tags$input(type = "radio", name = rowID,
                                   title = value, # to provide tooltips with the value
                                   value = value)
     if (value %in% selected)
       inputTag$attribs$checked <- "checked"
 
-      shiny::tags$td(inputTag)
+    shiny::tags$td(inputTag)
   }, SIMPLIFY = FALSE, USE.NAMES = FALSE)
 
   style <- NULL
@@ -52,38 +54,39 @@ generateRadioRow <- function(rowId, rowLabel, rowName, choiceNames, choiceValues
     style <- paste0(style, "max-width:", labelsWidth[[2]],";")
   }
 
-  row_dat <- list(if (is.null(style)) shiny::tags$td(rowLabel) else shiny::tags$td(rowLabel, style = style),
-              if (is.null(style)) shiny::tags$td(rowName) else shiny::tags$td(rowName, style = style),
-              row_dat)
+  row_dat <- list(if (is.null(style)) shiny::tags$td(rowLLabel) else shiny::tags$td(rowLLabel, style = style),
+                  if (is.null(style)) shiny::tags$td(rowRLabel) else shiny::tags$td(rowRLabel, style = style),
+                  row_dat)
 
-  shiny::tags$tr(name = rowId,
+  shiny::tags$tr(name = rowID,
                  class = "shiny-radiomatrix-row", # used for CSS styling
-    row_dat)
+                 row_dat)
 }
 
 
 #' Generate the header row of radioMatrixInput
 #'
 #' @param choiceNames character. Names for each option to be displayed on top of the table
+#' @param rowLLabel character. Displayed labels of the leftmost points of the row.
+#' @param rowRLabel character. Displayed labels of the rightmost points of the row.
 #'
 #' @return HTML markup for the header table row
 #'
+#' @keyword internal
+#'
 #' @noRd
-
-generateRadioMatrixHeader <- function(choiceNames, headerRow = list(NULL, NULL)){
-  if(is.null(headerRow[[1]])){
-    headerRowLabelOne = "ID"
+#'
+generateRadioMatrixHeader <- function(choiceNames, rowLLabels, rowRLabels){
+  if(!is.null(rowRLabels)){
+    rRName <- ifelse(is.matrix(rowRLabels), colnames(rowRLabels), "")
+    rLName <- ifelse(is.matrix(rowLLabels), colnames(rowLLabels), "")
+    header <- lapply(c("ID", rLName, choiceNames, rRName),
+                     function(n){ shiny::tags$td(n)})
   } else {
-    headerRowLabelOne = headerRow[[1]]
+    rLName <- ifelse(is.matrix(rowLLabels), colnames(rowLLabels), "")
+    header <- lapply(c("ID", rLName, choiceNames),
+                     function(n){ shiny::tags$td(n)})
   }
-  if(length(headerRow) > 1 && !is.null(headerRow[[2]])){
-    headerRowLabelTwo = headerRow[[2]]
-  } else {
-    headerRowLabelTwo = "Basic Evaluation Index"
-  }
-  header <- lapply(c(headerRowLabelOne, headerRowLabelTwo, choiceNames), function(n){
-    shiny::tags$td(n)
-  })
 
   shiny::tags$tr(header)
 }
@@ -92,12 +95,16 @@ generateRadioMatrixHeader <- function(choiceNames, headerRow = list(NULL, NULL))
 #' Generate complete HTML markup for radioMatrixIpnut
 #'
 #' @param inputId The input slot that will be used to access the value.
-#' @param rowIds character. Vector of row identifiers. They will be used to find
+#' @param rowIDs character. Vector of row identifiers. They will be used to find
 #'   values that the user has selected. In the output, the component will return
 #'   a named list of values, each name corresponding to the row id, and the
 #'   value - to the value user has selected in this row.
-#' @param rowLabels,rowNames character. Vectors of displayed labels of the
-#'   leftmost and rightmost points of each row
+#' @param rowLLabels character. Vector (or a matrix with one column) of displayed
+#'   labels of the leftmost points of each row. The column name could be displayed
+#'   in the header of the matrix.
+#' @param rowRLabels character. Vector (or a matrix with one column) of displayed
+#'   labels of the rightmost points of each row. The column name could be displayed
+#'   in the header of the matrix.
 #' @param selected either \code{NULL} (default) or a vector of values which
 #'   should be selected when the component is created
 #' @param choiceNames,choiceValues as in radioButtons. Repeated here: List of
@@ -115,23 +122,22 @@ generateRadioMatrixHeader <- function(choiceNames, headerRow = list(NULL, NULL))
 #'   \code{style} attribute of the labels \code{td} tags.
 #' @param session copied from \code{shiny:::generateOptions}
 #'
-#' @return HTML markup for the radioMatrixInput
+#' @keyword internal
 #'
 #' @noRd
-
-generateRadioMatrix <- function (inputId, rowIds, rowLabels, rowNames,
+#'
+generateRadioMatrix <- function (inputId, rowIDs, rowLLabels, rowRLabels = NULL,
                                  choiceNames = NULL, choiceValues = NULL,
                                  selected = NULL,
-                                 labelsWidth = list(NULL,NULL),
-                                 session = getDefaultReactiveDomain(),
-                                 headerRow = list(NULL, NULL)){
+                                 labelsWidth = list(NULL, NULL),
+                                 session = shiny::getDefaultReactiveDomain()){
 
-  header <- generateRadioMatrixHeader(choiceNames, headerRow)
-  rows <- lapply(1:length(rowIds), function(i){
-    generateRadioRow(rowId = rowIds[[i]], rowLabel = rowLabels[[i]], rowName = rowNames[[i]],
+  header <- generateRadioMatrixHeader(choiceNames, rowLLabels, rowRLabels)
+  rows <- lapply(1:length(rowIDs), function(i){
+    generateRadioRow(rowID = rowIDs[[i]], rowLLabel = rowLLabels[[i]], rowRLabel = rowRLabels[[i]],
                      choiceNames = choiceNames, choiceValues = choiceValues,
                      selected = if (is.null(selected)) selected else selected[[i]],
-                     labelsWidth = labelsWidth, headerRow = headerRow)
+                     labelsWidth = labelsWidth)
   })
 
   table <- shiny::tags$table(header, rows)
@@ -139,31 +145,83 @@ generateRadioMatrix <- function (inputId, rowIds, rowLabels, rowNames,
   shiny::div(class = "shiny-radiomatrix", table)
 }
 
-validateParams <- function(rowIds, rowLabels, rowNames, selected, choiceNames, labelsWidth){
+#' @param inputId The input slot that will be used to access the value.
+#' @param rowIDs character. Vector of row identifiers. They will be used to find
+#'   values that the user has selected. In the output, the component will return
+#'   a named list of values, each name corresponding to the row id, and the
+#'   value - to the value user has selected in this row.
+#' @param rowLLabels character. Vector (or a matrix with one column) of displayed
+#'   labels of the leftmost points of each row. The column name could be displayed
+#'   in the header of the matrix.
+#' @param rowRLabels character. Vector (or a matrix with one column) of displayed
+#'   labels of the rightmost points of each row. The column name could be displayed
+#'   in the header of the matrix.
+#' @param choices List of values to select from (if elements of the list are
+#'   named then that name rather than the value is displayed to the user). If
+#'   this argument is provided, then choiceNames and choiceValues must not be
+#'   provided, and vice-versa. The values should be strings; other types (such
+#'   as logicals and numbers) will be coerced to strings.
+#' @param selected either \code{NULL} (default) or a vector of values which
+#'   should be selected when the component is created
+#' @param choiceNames,choiceValues as in radioButtons. Repeated here: List of
+#'   names and values, respectively, that are displayed to the user in the app
+#'   and correspond to the each choice (for this reason, choiceNames and
+#'   choiceValues must have the same length). If either of these arguments is
+#'   provided, then the other must be provided and choices must not be provided.
+#'   The advantage of using both of these over a named list for choices is that
+#'   choiceNames allows any type of UI object to be passed through (tag objects,
+#'   icons, HTML code, ...), instead of just simple text.
+#' @param labelsWidth - vector of two values, NULL by default. Each value can be
+#'   replaced with a character, specifying the minimum (first value) and maximum
+#'   (second value) width of the labels columns. The values are assumed contain
+#'   the width itself and the unit, e.g. "20px", and will be written to the
+#'   \code{style} attribute of the labels \code{td} tags.
+#'
+#' @keyword internal
+#'
+#' @noRd
+#'
+validateParams <- function(rowIDs, rowLLabels, rowRLabels, selected, choiceNames, labelsWidth){
 
-  if (is.null(selected)){
-    checks <- list(rowIds, rowLabels, rowNames)
+  cv.inv <- ifelse(!is.null(rowRLabels), c("rowLLabels", "rowRLabels"), c("rowLLabels"))
+  for (i_i in 1 : length(cv.inv)){
+    if (!any((length(get(cv.inv[i_i])) >= 1 && !is.list(get(cv.inv[i_i]))),
+             (length(dim(get(cv.inv[i_i]))) == 2 && dim(get(cv.inv[i_i]))[1L] >= 1))) {
+      stop("roWLabels must be a a vector or a matrix-like object with at least one column.")
+    }
+  }
+
+  if (!is.null(rowRLabels) & !is.null(selected)) {
+    checks <- list(rowIDs, rowLLabels, rowRLabels, selected)
   } else {
-    checks <- list(rowIds, rowLabels, rowNames, selected)
+    if (is.null(rowRLabels) & is.null(selected)) {
+      checks <- list(rowIDs, rowLLabels)
+    } else {
+      if (!is.null(rowRLabels)) {
+        checks <- list(rowIDs, rowLLabels, rowRLabels)
+      } else {
+        checks <- list(rowIDs, rowLLabels, selected)
+      }
+    }
   }
 
   lengths <- sapply(checks, length)
 
   if (length(unique(lengths)) > 1) {
-    stop("All of rowIds, rowLabels, rowNames, selected should be of the same length!")
+    stop("All of rowIDs, rowLabels and selected must be of the same length!")
   }
 
-  if (length(rowIds) < 1 ){
-    stop("The radio matrix should contain at least  one row (i.e. at least one rowId must be specified)")
+  if (length(rowIDs) < 1 ){
+    stop("The radio matrix should contain at least one row (i.e. at least one rowID must be specified).")
   }
 
-  if(length(unique(rowIds)) < length(rowIds)){
-    stop(paste("Some of the rowIds are not unique! The following values are duplicated:",
-               rowIds[duplicated(rowIds)]))
+  if(length(unique(rowIDs)) < length(rowIDs)){
+    stop(paste("Some of the rowIDs are not unique! The following values are duplicated:",
+               rowIDs[duplicated(rowIDs)]), ".")
   }
 
   if (length(choiceNames) < 2){
-    stop("There should be at least two columns in the radio matrix (i.e. at least two choiceNames specified)")
+    stop("There should be at least two columns in the radio matrix (i.e. at least two choiceNames specified).")
   }
 
   if (!is.list(labelsWidth)){
@@ -183,12 +241,16 @@ validateParams <- function(rowIds, rowLabels, rowNames, selected, choiceNames, l
 #' Create radioMatrixInput
 #'
 #' @param inputId The input slot that will be used to access the value.
-#' @param rowIds character. Vector of row identifiers. They will be used to find
+#' @param rowIDs character. Vector of row identifiers. They will be used to find
 #'   values that the user has selected. In the output, the component will return
 #'   a named list of values, each name corresponding to the row id, and the
 #'   value - to the value user has selected in this row.
-#' @param rowLabels,rowNames character. Vectors of displayed labels of the
-#'   leftmost and rightmost points of each row
+#' @param rowLLabels character. Vector (or a matrix with one column) of displayed
+#'   labels of the leftmost points of each row. The column name could be displayed
+#'   in the header of the matrix.
+#' @param rowRLabels character. Vector (or a matrix with one column) of displayed
+#'   labels of the rightmost points of each row. The column name could be displayed
+#'   in the header of the matrix.
 #' @param choices List of values to select from (if elements of the list are
 #'   named then that name rather than the value is displayed to the user). If
 #'   this argument is provided, then choiceNames and choiceValues must not be
@@ -211,23 +273,24 @@ validateParams <- function(rowIds, rowLabels, rowNames, selected, choiceNames, l
 #'   \code{style} attribute of the labels \code{td} tags.
 #'
 #' @return HTML markup for radioMatrixInput
+#'
 #' @export
-
-radioMatrixInput <- function(inputId, rowIds, rowLabels, rowNames, choices = NULL,
+#'
+radioMatrixInput <- function(inputId, rowIDs, rowLLabels, rowRLabels = NULL, choices = NULL,
                              selected = NULL, choiceNames = NULL, choiceValues = NULL,
-                             labelsWidth = list(NULL,NULL), headerRow = list(NULL, NULL)) {
+                             labelsWidth = list(NULL, NULL)) {
 
   # check the inputs
-  args <- shiny:::normalizeChoicesArgs(choices, choiceNames, choiceValues)
-  selected <- shiny:::restoreInput(id = inputId, default = selected)
-  validateParams(rowIds, rowLabels, rowNames, selected, args$choiceNames,labelsWidth)
+  args <- eval(parse(text = "shiny:::normalizeChoicesArgs(choices, choiceNames, choiceValues)"))
+  selected <- eval(parse(text = "restoreInput(id = inputId, default = selected)"))
+  validateParams(rowIDs, rowLLabels, rowRLabels, selected, args$choiceNames,labelsWidth)
 
   # generate the HTML for the controller itself
-  radiomatrix <- generateRadioMatrix(inputId = inputID, rowIds = rowIds,
-                                     rowLabels = rowLabels, rowNames = rowNames,
+  radiomatrix <- generateRadioMatrix(inputId = inputId, rowIDs = rowIDs,
+                                     rowLLabels = rowLLabels, rowRLabels = rowRLabels,
                                      selected = selected,
                                      choiceNames = args$choiceNames, choiceValues = args$choiceValues,
-                                     labelsWidth = labelsWidth, headerRow = headerRow)
+                                     labelsWidth = labelsWidth)
 
   divClass <- "form-group shiny-radiomatrix-container dataTable-container"
 
@@ -237,13 +300,11 @@ radioMatrixInput <- function(inputId, rowIds, rowLabels, rowNames, choices = NUL
   shiny::tagList(
     shiny::tags$head(
       shiny::singleton(shiny::tags$script(src = "radiomatrix/inputRadioMatrixBinding.js")),
-      #shiny::singleton(shiny::tags$script(src = "radiomatrix/inputRadioMatrixUtils.js")),
       shiny::singleton(shiny::tags$link(rel = "stylesheet", type = "text/css",
                                         href = "radiomatrix/inputRadioMatrixCss.css"))
 
-      ),
+    ),
 
-    # Wrp controllerin a div and return
     shiny::tags$div(id = inputId,
                     class = divClass,
                     radiomatrix

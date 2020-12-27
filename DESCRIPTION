@@ -1,14 +1,18 @@
-Package: shinyRadioMatrix
+Package: inputRadioMatrix
 Type: Package
-Title: R Shiny input: matrix of radio buttons
-Version: 0.1.2
-Author: Zsolt Szelepcsenyi
-Maintainer: Zsolt Szelepcseny <szelepcsenyi.zsolt@evista.hu>
-Description: An input controller for R Shiny: a matrix of radio buttons,
-    where exactly one option per row can be selected. It extends the radioButtons 
-    controller in the base Shiny, allowing to create something akin to Likert scales.
-License: GPL-3 | file LICENSE
-Imports: shiny
+Title: Create a matrix with radio buttons
+Version: 0.1.0
+Authors@R: 
+    c(person("Zsolt", "Szelepcsényi", email = "szelepcsenyi.zsolt@gmail.com", 
+             role = c("aut", "cre")),
+      person("Zoltán", "Szelepcsényi", email = "szelepcsenyi.zoltan@gmail.com",
+             role = "aut"))
+Maintainer: Zsolt Szelepcsényi <szelepcsenyi.zsolt@gmail.com>
+Description:  An input controller for R Shiny: a matrix with radio buttons, 
+    where only one option per row can be selected.
+Imports:
+    shiny
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.0.1
+RoxygenNote: 7.1.1
