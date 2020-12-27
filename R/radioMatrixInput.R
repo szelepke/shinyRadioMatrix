@@ -54,9 +54,11 @@ generateRadioRow <- function(rowID, rowLLabel, rowRLabel, choiceNames, choiceVal
     style <- paste0(style, "max-width:", labelsWidth[[2]],";")
   }
 
-  row_dat <- list(if (is.null(style)) shiny::tags$td(rowLLabel) else shiny::tags$td(rowLLabel, style = style),
-                  if (is.null(style)) shiny::tags$td(rowRLabel) else shiny::tags$td(rowRLabel, style = style),
-                  row_dat)
+  row_dat <- list(shiny::tags$td(rowID),
+                  if (is.null(style)) shiny::tags$td(rowLLabel) else shiny::tags$td(rowLLabel, style = style),
+                  row_dat,
+                  if (is.null(style)) shiny::tags$td(rowRLabel) else shiny::tags$td(rowRLabel, style = style)
+                  )
 
   shiny::tags$tr(name = rowID,
                  class = "shiny-radiomatrix-row", # used for CSS styling
