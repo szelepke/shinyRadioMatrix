@@ -1,5 +1,5 @@
 
-# inputRadioMatrix
+# shinyRadioMatrix
 
 ## Introduction
 
@@ -14,12 +14,14 @@ This is a taxon-PFT matrix that is required for implementing the so-called biomi
       Betula  o    o   o  o  o
        Picea  o    o   o  o  o
       
-Reference
+
+###Reference
+
 Prentice IC, Guiot J, Huntley B, Jolly D, Cheddadi R (1996) Reconstructing biomes from palaeoecological data: a general method and its application to European pollen data at 0 and 6 ka. Clim Dyn 12(3):185–194. DOI: [10.1007/BF00211617] (https://link.springer.com/article/10.1007%2FBF00211617)
 
 ## Installation
 
-inputRadioMatrix can be used from your browser with your current R installation. The package can be installed in the following way:
+radioMatrixInput can be used from your browser with your current R installation. The package can be installed in the following way:
 
 ``` r
 if (!require(devtools)) install.packages("devtools")

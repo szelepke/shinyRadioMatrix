@@ -274,6 +274,24 @@ validateParams <- function(rowIDs, rowLLabels, rowRLabels, selected, choiceNames
 #'
 #' @return HTML markup for radioMatrixInput
 #'
+#' @example
+#' library(shiny)
+#' library(shinyRadioMatrix)
+#'
+#' ui <- fluidPage(
+#'
+#'   radioMatrixInput(inputId = "rmi", rowIDs = letters[1:16],
+#'                    rowLLabels = letters[1:16], choices = 1:10,
+#'                    selected = rep(c(1,2), each = 8)),
+#'   verbatimTextOutput('debug')
+#'   )
+#'
+#' server <- function(input, output, session) {
+#'   output$debug <- renderPrint({input$rmi})
+#'  }
+#'
+#'  shinyApp(ui, server)
+#'
 #' @export
 #'
 radioMatrixInput <- function(inputId, rowIDs, rowLLabels, rowRLabels = NULL, choices = NULL,
