@@ -322,9 +322,7 @@ radioMatrixInput <- function(inputId, rowIDs, rowLLabels, rowRLabels = NULL, cho
   # check the inputs
   args <- eval(parse(text = "shiny:::normalizeChoicesArgs(choices, choiceNames, choiceValues)"))
   selected <- eval(parse(text = "restoreInput(id = inputId, default = selected)"))
-  valid <- validateParams(rowIDs, rowLLabels, rowRLabels, selected, args$choiceNames, labelsWidth)
-  rowLLabels <- valid$rowLLabels
-  rowRLabels <- valid$rowRLabels
+  validateParams(rowIDs, rowLLabels, rowRLabels, selected, args$choiceNames, labelsWidth)
 
   # generate the HTML for the controller itself
   radiomatrix <- generateRadioMatrix(inputId = inputId, rowIDs = rowIDs,
