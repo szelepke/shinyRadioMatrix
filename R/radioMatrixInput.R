@@ -57,7 +57,7 @@ generateRadioRow <- function(rowID, rowLLabel, rowRLabel, choiceNames, choiceVal
   row_dat <- list(shiny::tags$td(rowID),
                   if (is.null(style)) shiny::tags$td(rowLLabel) else shiny::tags$td(rowLLabel, style = style),
                   row_dat,
-                  if (is.null(style)) shiny::tags$td(rowRLabel) else shiny::tags$td(rowRLabel, style = style)
+                  if (!is.null(rowRLabel)) if (is.null(style)) shiny::tags$td(rowRLabel) else shiny::tags$td(rowRLabel, style = style)
                   )
 
   shiny::tags$tr(name = rowID,
@@ -106,7 +106,8 @@ generateRadioMatrixHeader <- function(choiceNames, rowLLabels, rowRLabels){
 #'   in the header of the matrix.
 #' @param rowRLabels character. Vector (or a matrix with one column) of displayed
 #'   labels of the rightmost points of each row. The column name could be displayed
-#'   in the header of the matrix.
+#'   in the header of the matrix. Using this argument is optional. But it allows
+#'   to create Likert scales, potentially with several scales arranged in a matrix.
 #' @param selected either \code{NULL} (default) or a vector of values which
 #'   should be selected when the component is created
 #' @param choiceNames,choiceValues as in radioButtons. Repeated here: List of
@@ -157,7 +158,8 @@ generateRadioMatrix <- function (inputId, rowIDs, rowLLabels, rowRLabels = NULL,
 #'   in the header of the matrix.
 #' @param rowRLabels character. Vector (or a matrix with one column) of displayed
 #'   labels of the rightmost points of each row. The column name could be displayed
-#'   in the header of the matrix.
+#'   in the header of the matrix. Using this argument is optional. But it allows
+#'   to create Likert scales, potentially with several scales arranged in a matrix.
 #' @param choices List of values to select from (if elements of the list are
 #'   named then that name rather than the value is displayed to the user). If
 #'   this argument is provided, then choiceNames and choiceValues must not be
@@ -188,9 +190,17 @@ validateParams <- function(rowIDs, rowLLabels, rowRLabels, selected, choiceNames
   cv.inv <- ifelse(!is.null(rowRLabels), c("rowLLabels", "rowRLabels"), c("rowLLabels"))
   for (i_i in 1 : length(cv.inv)){
     if (!any((length(get(cv.inv[i_i])) >= 1 && !is.list(get(cv.inv[i_i]))),
-             (length(dim(get(cv.inv[i_i]))) == 2 && dim(get(cv.inv[i_i]))[1L] >= 1))) {
-      stop("roWLabels must be a a vector or a matrix-like object with at least one column.")
+             (length(dim(get(cv.inv[i_i]))) == 2 && dim(get(cv.inv[i_i]))[2L] == 1))) {
+      stop(cv.inv[i_i], " must be a a vector or a matrix-like object with at least one column.")
     }
+  }
+
+  if (length(dim(rowLLabels)) == 2 && dim(rowLLabels)[2L] == 1) {
+    rowLLabels <- array(t(rowLLabels))
+  }
+
+  if (length(dim(rowRLabels)) == 2 && dim(rowRLabels)[2L] == 1) {
+    rowRLabels <- array(t(rowRLabels))
   }
 
   if (!is.null(rowRLabels) & !is.null(selected)) {
@@ -252,7 +262,8 @@ validateParams <- function(rowIDs, rowLLabels, rowRLabels, selected, choiceNames
 #'   in the header of the matrix.
 #' @param rowRLabels character. Vector (or a matrix with one column) of displayed
 #'   labels of the rightmost points of each row. The column name could be displayed
-#'   in the header of the matrix.
+#'   in the header of the matrix. Using this argument is optional. But it allows
+#'   to create Likert scales, potentially with several scales arranged in a matrix.
 #' @param choices List of values to select from (if elements of the list are
 #'   named then that name rather than the value is displayed to the user). If
 #'   this argument is provided, then choiceNames and choiceValues must not be
@@ -276,23 +287,31 @@ validateParams <- function(rowIDs, rowLLabels, rowRLabels, selected, choiceNames
 #'
 #' @return HTML markup for radioMatrixInput
 #'
-#' @example
+#' @examples
 #' library(shiny)
 #' library(shinyRadioMatrix)
 #'
-#' ui <- fluidPage(
+#' data(taxon_list)
+#' data(pft_list)
 #'
-#'   radioMatrixInput(inputId = "rmi", rowIDs = letters[1:16],
-#'                    rowLLabels = letters[1:16], choices = 1:10,
-#'                    selected = rep(c(1,2), each = 8)),
-#'   verbatimTextOutput('debug')
+#' ## Only run examples in interactive R sessions
+#' if (interactive()) {
+#'
+#'   ui <- fluidPage(
+#'
+#'     radioMatrixInput(inputId = "rmi", rowIDs = taxon_list$Var,
+#'                      rowLLabels = taxon_list$VarName, choices = pft_list$ID,
+#'                      selected = rep(pft_list$ID[1], nrow(taxon_list))),
+#'     verbatimTextOutput('debug')
 #'   )
 #'
-#' server <- function(input, output, session) {
-#'   output$debug <- renderPrint({input$rmi})
-#'  }
+#'   server <- function(input, output, session) {
+#'     output$debug <- renderPrint({input$rmi})
+#'   }
 #'
-#'  shinyApp(ui, server)
+#'   shinyApp(ui, server)
+#'
+#' }
 #'
 #' @export
 #'
@@ -303,7 +322,9 @@ radioMatrixInput <- function(inputId, rowIDs, rowLLabels, rowRLabels = NULL, cho
   # check the inputs
   args <- eval(parse(text = "shiny:::normalizeChoicesArgs(choices, choiceNames, choiceValues)"))
   selected <- eval(parse(text = "restoreInput(id = inputId, default = selected)"))
-  validateParams(rowIDs, rowLLabels, rowRLabels, selected, args$choiceNames,labelsWidth)
+  valid <- validateParams(rowIDs, rowLLabels, rowRLabels, selected, args$choiceNames, labelsWidth)
+  rowLLabels <- valid$rowLLabels
+  rowRLabels <- valid$rowRLabels
 
   # generate the HTML for the controller itself
   radiomatrix <- generateRadioMatrix(inputId = inputId, rowIDs = rowIDs,

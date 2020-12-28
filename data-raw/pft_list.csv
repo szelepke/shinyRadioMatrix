@@ -1,0 +1,15 @@
+ID;Name
+bs;Boreal summergreen
+bs|aa;Boreal summergreen arctic-alpine
+bec;Boreal evergreen conifer
+bec|ctc;Boreal evergreen/cool-temperate conifer
+ctc1;Intermediate temperate conifer
+ec;Eurythermic conifer
+ts|bs|aa;Temperate/boreal summergreen/arctic-alpine
+ts|bs;Temperate/boreal summergreen
+ts;Temperate summergreen
+ts1;Cool-temperate summergreen
+ts2;Warm-temperate summergreen
+wte;Warm-temperate broad-leaved evergreen
+wte1;Cool-temperate broad-leaved evergreen
+wte2;Warm-temperate sclerophyll trees/shrub

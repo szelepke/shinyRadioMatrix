@@ -3,6 +3,8 @@
 \alias{generateRadioMatrixHeader}
 \alias{generateRadioMatrix}
 \alias{validateParams}
+\alias{taxon_list}
+\alias{pft_list}
 
 \title{Internal shinyRadioMatrix Functions}
 

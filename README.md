@@ -7,17 +7,21 @@ This package provides one new R Shiny component: radioMatrixInput. It allows to 
 
 There is often a need to encode relationships between entities in two different classes. A certain case of this is when a particular entity of one class can be also belong to multiple entities from another class at the same time, but reversing the assignment is not necessarily true. This tool is dedicated to these cases.
 
-This is a taxon-PFT matrix that is required for implementing the so-called biomization procedure (see Prentice et al. 1996):
+This is a taxon-PFT matrix that is required for performing a PFT-based climate reconstruction (see Peyron et al. 1998):
 
-             aa aa/bs bs ts sf
-    Ambrosia  o    o   o  o  o
-      Betula  o    o   o  o  o
-       Picea  o    o   o  o  o
+               bs bs/aa bec bec/ctc ctc ec ts/bs/aa ts/bs ts ts1 ts2 wte
+       *Abies*  o   o    o     o     o   o     o      o    o  o   o   o
+       *Alnus*  o   o    o     o     o   o     o      o    o  o   o   o
+      *Betula*  o   o    o     o     o   o     o      o    o  o   o   o
+    *Castanea*  o   o    o     o     o   o     o      o    o  o   o   o
+       *Fagus*  o   o    o     o     o   o     o      o    o  o   o   o
+       *Larix*  o   o    o     o     o   o     o      o    o  o   o   o
+       *Picea*  o   o    o     o     o   o     o      o    o  o   o   o
       
 
-###Reference
+### Reference
 
-Prentice IC, Guiot J, Huntley B, Jolly D, Cheddadi R (1996) Reconstructing biomes from palaeoecological data: a general method and its application to European pollen data at 0 and 6 ka. Clim Dyn 12(3):185–194. DOI: [10.1007/BF00211617] (https://link.springer.com/article/10.1007%2FBF00211617)
+Peyron O, Guiot J, Cheddadi R, Tarasov P, Reille M, de Beaulieu J-L, Bottema S, Andrieu V (1998) Climatic Reconstruction in Europe for 18,000 YR B.P. from Pollen Data. Quat Res 49(2):183–196. DOI: [10.1006/qres.1997.1961](https://www.cambridge.org/core/journals/quaternary-research/article/abs/climatic-reconstruction-in-europe-for-18000-yr-bp-from-pollen-data/DD0EEDC0186456AC8ED1E3937EC9239E)
 
 ## Installation
 
@@ -43,7 +47,8 @@ ui <- fluidPage(
                    rowLLabels = letters[1:16], choices = 1:10,
                    selected = rep(c(1,2), each = 8)),
   verbatimTextOutput('debug')
-  )
+  
+)
 
 server <- function(input, output, session) {
   output$debug <- renderPrint({input$rmi})
@@ -51,4 +56,3 @@ server <- function(input, output, session) {
 
 shinyApp(ui, server)
 ```
-
