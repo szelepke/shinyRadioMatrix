@@ -41,14 +41,36 @@ This is a basic example which shows you how to solve a common problem:
 library(shiny)
 library(shinyRadioMatrix)
 
+## Only run examples in interactive R sessions
+if (interactive()) {
+    
+    ui <- fluidPage(
+        
+        radioMatrixInput(inputId = "rmi", rowIDs = taxon_list$Var,
+                         rowLLabels = 
+                         as.matrix(subset(taxon_list, select = "VarName")), 
+                         choices = pft_list$ID,
+                         selected = taxon_list$DefPFT),
+        verbatimTextOutput('debug')
+    )
+    
+    server <- function(input, output, session) {
+        output$debug <- renderPrint({input$rmi})
+    }
+    
+    shinyApp(ui, server)
+    
+}
+
 ui <- fluidPage(
 
-  radioMatrixInput(inputId = "rmi", rowIDs = letters[1:16],
-                   rowLLabels = letters[1:16], choices = 1:10,
-                   selected = rep(c(1,2), each = 8)),
+  radioMatrixInput(inputId = "rmi", rowIDs = c("Performance", "Statement A"),
+                   rowLLabels = c("Poor", "Agree"), 
+                   rowRLabels = c("Excellent", "Disagree"),
+                   choices = 0:10,
+                   selected = rep(5, 2)),
   verbatimTextOutput('debug')
-  
-)
+  )
 
 server <- function(input, output, session) {
   output$debug <- renderPrint({input$rmi})

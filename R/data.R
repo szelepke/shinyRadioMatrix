@@ -11,6 +11,7 @@
 #'   \item{Var}{Unique identifier for the variable.}
 #'   \item{VarName}{Name of the pollen type or variable, including Linnean and
 #'       non-Linnean names (Acer saccharum-type, Cerealea, Avena/Triticum).}
+#'   \item{DefPFT}{Default PFT assignment for the variable.}
 #'  }
 #'
 #' @examples

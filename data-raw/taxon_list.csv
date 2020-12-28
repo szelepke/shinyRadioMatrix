@@ -1,32 +1,32 @@
-Var;VarName
-1;Abies
-32;Alnus
-95;Betula
-119;Buxus
-137;Carpinus betulus
-148;Cedrus
-196;Cistus
-217;Corylus
-304;Fagus
-312;Frangula
-317;Fraxinus excelsior-type
-318;Fraxinus ornus
-352;Hedera
-385;Ilex
-392;Juglans
-396;Juniperus-type
-404;Larix
-562;Phillyrea
-564;Picea
-568;Pinus diploxylon-type
-569;Pinus haploxylon-type
-572;Pistacia
-591;Platanus
-620;Populus
-657;Quercus ilex-type
-659;Quercus robur-type
-712;Salix
-812;Taxus baccata
-821;Tilia
-853;Ulmus
-897;Vitis
+Var;VarName;DefPFT
+1;Abies;bec|ctc
+32;Alnus;ts|bs|aa
+95;Betula;bs|aa
+119;Buxus;wte1
+137;Carpinus betulus;ts1
+148;Cedrus;ctc1
+196;Cistus;wte2
+217;Corylus;ts1
+304;Fagus;ts1
+312;Frangula;ts1
+317;Fraxinus excelsior-type;ts
+318;Fraxinus ornus;ts2
+352;Hedera;wte1
+385;Ilex;wt1
+392;Juglans;ts2
+396;Juniperus-type;ec
+404;Larix;bs
+562;Phillyrea;wte2
+564;Picea;bec
+568;Pinus diploxylon-type;ec
+569;Pinus haploxylon-type;bec
+572;Pistacia;wte2
+591;Platanus;ts2
+620;Populus;ts|bs
+657;Quercus ilex-type;wte
+659;Quercus robur-type;ts
+712;Salix;ts|bs|aa
+812;Taxus baccata;ctc1
+821;Tilia;ts1
+853;Ulmus;ts1
+897;Vitis;ts2
