@@ -5,7 +5,7 @@
 \alias{taxon_list}
 \title{Taxon List}
 \format{
-A data frame with 31 rows and 3 columns:
+A data frame with 31 rows and 2 columns:
 \describe{
   \item{Var}{Unique identifier for the variable.}
   \item{VarName}{Name of the pollen type or variable, including Linnean and

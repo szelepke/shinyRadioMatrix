@@ -26,7 +26,7 @@
 #' @return HTML markup for a table row with radio buttons inputs inside each
 #'   cell
 #'
-#' @keyword internal
+#' @keywords internal
 #'
 #' @noRd
 #'
@@ -74,7 +74,7 @@ generateRadioRow <- function(rowID, rowLLabel, rowRLabel, choiceNames, choiceVal
 #'
 #' @return HTML markup for the header table row
 #'
-#' @keyword internal
+#' @keywords internal
 #'
 #' @noRd
 #'
@@ -125,7 +125,7 @@ generateRadioMatrixHeader <- function(choiceNames, rowLLabels, rowRLabels){
 #'   \code{style} attribute of the labels \code{td} tags.
 #' @param session copied from \code{shiny:::generateOptions}
 #'
-#' @keyword internal
+#' @keywords internal
 #'
 #' @noRd
 #'
@@ -181,7 +181,7 @@ generateRadioMatrix <- function (inputId, rowIDs, rowLLabels, rowRLabels = NULL,
 #'   the width itself and the unit, e.g. "20px", and will be written to the
 #'   \code{style} attribute of the labels \code{td} tags.
 #'
-#' @keyword internal
+#' @keywords internal
 #'
 #' @noRd
 #'
