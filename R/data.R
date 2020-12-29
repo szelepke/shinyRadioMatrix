@@ -1,7 +1,7 @@
 #' Taxon List
 #'
-#' @name taxon_list
-#' @aliases taxon_list
+#' @name exTaxonList
+#' @aliases exTaxonList
 #' @docType data
 #'
 #' @description A taxon list, which gives the row names in a taxon-PFT matrix.
@@ -15,15 +15,15 @@
 #'  }
 #'
 #' @examples
-#' data(taxon_list)
-#' str(taxon_list)
+#' data(exTaxonList)
+#' str(exTaxonList)
 #'
 NULL
 
 #' PFT List
 #'
-#' @name pft_list
-#' @aliases pft_list
+#' @name exPftList
+#' @aliases exPftList
 #' @docType data
 #'
 #' @description A PFT list, which gives the column names in a taxon-PFT matrix.
@@ -35,7 +35,7 @@ NULL
 #'  }
 #'
 #' @examples
-#' data(pft_list)
-#' str(pft_list)
+#' data(exPftList)
+#' str(exPftList)
 #'
 NULL

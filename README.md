@@ -44,24 +44,25 @@ library(shinyRadioMatrix)
 ## Only run examples in interactive R sessions
 if (interactive()) {
 
-  data(taxon_list)
-  data(pft_list)
+  data(exTaxonList)
+  data(exPftList)
 
-    ui <- fluidPage(
+  ui <- fluidPage(
         
-        radioMatrixInput(inputId = "rmi", rowIDs = taxon_list$Var,
-                         rowLLabels = 
-                         as.matrix(subset(taxon_list, select = "VarName")), 
-                         choices = pft_list$ID,
-                         selected = taxon_list$DefPFT),
-        verbatimTextOutput('debug')
-    )
+    radioMatrixInput(inputId = "rmi01", rowIDs = head(exTaxonList$Var), 
+                     rowLLabels = head(
+                     as.matrix(subset(exTaxonList, select = "VarName"))
+                     ), 
+                     choices = exPftList$ID, 
+                     selected = head(exTaxonList$DefPFT)), 
+    verbatimTextOutput('debug01')
+  )
     
-    server <- function(input, output, session) {
-        output$debug <- renderPrint({input$rmi})
-    }
+  server <- function(input, output, session) { 
+    output$debug01 <- renderPrint({input$rmi01})
+  }
     
-    shinyApp(ui, server)
+  shinyApp(ui, server)
     
 }
 
@@ -69,16 +70,17 @@ if (interactive()) {
 
   ui <- fluidPage(
 
-    radioMatrixInput(inputId = "rmi", rowIDs = c("Performance", "Statement A"),
+    radioMatrixInput(inputId = "rmi02", rowIDs = c("Performance", "Statement A"),
                     rowLLabels = c("Poor", "Agree"), 
                     rowRLabels = c("Excellent", "Disagree"),
-                    choices = 0:10,
-                    selected = rep(5, 2)),
-    verbatimTextOutput('debug')
+                    choices = 1:5,
+                    selected = rep(3, 2),
+                    labelsWidth = list("100px", "100px")),
+    verbatimTextOutput('debug02')
     )
 
   server <- function(input, output, session) {
-    output$debug <- renderPrint({input$rmi})
+    output$debug02 <- renderPrint({input$rmi02})
   }
 
   shinyApp(ui, server)
