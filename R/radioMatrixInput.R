@@ -1,27 +1,27 @@
 #' Creates a single row for radioMatrixInput
 #'
-#' @param rowID character. Arbitrary id for the row. It should be unique within a
-#'   given radioMatrixInput, since it is used when identifying the value user
+#' @param rowID character string. Unique ID for the row. It should be unique within 
+#'   a given 'radioMatrixInput', since it is used when identifying the value user
 #'   has selected. It will be put into the \code{name} attribute of the
 #'   corresponding \code{<tr>} tag, as well as in the \code{name} attributes of
 #'   the radio button inputs in this row.
-#' @param rowLLabel character. Displayed labels of the leftmost points of the row.
-#' @param rowRLabel character. Displayed labels of the rightmost points of the row.
-#' @param choiceNames,choiceValues as in radioButtons. Repeated here: List of
-#'   names and values, respectively, that are displayed to the user in the app
-#'   and correspond to the each choice (for this reason, choiceNames and
-#'   choiceValues must have the same length). If either of these arguments is
-#'   provided, then the other must be provided and choices must not be provided.
-#'   The advantage of using both of these over a named list for choices is that
-#'   choiceNames allows any type of UI object to be passed through (tag objects,
-#'   icons, HTML code, ...), instead of just simple text.
-#' @param labelsWidth - vector of two values, NULL by default. Each value can be
-#'   replaced with a character, specifying the minimum (first value) and maximum
-#'   (second value) width of the labels columns. The values are assumed contain
-#'   the width itself and the unit, e.g. "20px", and will be written to the
-#'   \code{style} attribute of the labels \code{td} tags.
-#' @param selected either NULL (defualt) or the name of the value which should
-#'   be selected when the component is created.
+#' @param rowLLabel character string. A label displayed in the leftmost point of the row.
+#' @param rowRLabel character string. A label displayed in the rightmost point of the row.
+#' @param choiceNames,choiceValues List of names and values, respectively, that 
+#'   are displayed to the user in the app and correspond to the each choice (for 
+#'   this reason, the objects 'choiceNames' and 'choiceValues' must have the 
+#'   same length). If either of these arguments is provided, then the other must 
+#'   be provided and choices must not be provided. The advantage of using both of 
+#'   these over a named list for choices is that the object 'choiceNames' allows 
+#'   any type of UI object to be passed through (tag objects, icons, HTML code, 
+#'   ...), instead of just simple text.
+#' @param selected The initially selected values (if not specified then defaults 
+#'   to \code{NULL}).
+#' @param labelsWidth List of two valid values of CSS length unit. Each element 
+#'   has to be a properly formatted CSS unit of length (e.g., (like \code{'100\%'},
+#'   \code{'400px'}, \code{'auto'}), specifying the minimum (first value) and 
+#'   maximum (second value) width of the labels columns. The valid elements will 
+#'   be written to the \code{style} attribute of the labels \code{td} tags.
 #'
 #' @return HTML markup for a table row with radio buttons inputs inside each
 #'   cell
@@ -68,10 +68,16 @@ generateRadioRow <- function(rowID, rowLLabel, rowRLabel, choiceNames, choiceVal
 
 #' Generate the header row of radioMatrixInput
 #'
-#' @param choiceNames character. Names for each option to be displayed on top of the table
-#' @param rowLLabel character. Displayed labels of the leftmost points of the row.
-#' @param rowRLabel character. Displayed labels of the rightmost points of the row.
-#'
+#' @param choiceNames character. Names displayed on top of the assignment matrix.
+#' @param rowLLabels character. Vector (or a matrix with one column) of labels that 
+#'   displayed in the leftmost point of each row. The column name of the matrix 
+#'   could be displayed in the header of the assignment matrix.
+#' @param rowRLabels character. Vector (or a matrix with one column) of labels that 
+#'   displayed in the rightmost point of each row. The column name of the matrix 
+#'   could be displayed in the header of the assignment matrix. Using this argument 
+#'   is optional. But it allows to create Likert scales, potentially with several 
+#'   scales arranged in a matrix.
+#'   
 #' @return HTML markup for the header table row
 #'
 #' @keywords internal
@@ -97,32 +103,33 @@ generateRadioMatrixHeader <- function(choiceNames, rowLLabels, rowRLabels){
 #' Generate complete HTML markup for radioMatrixIpnut
 #'
 #' @param inputId The input slot that will be used to access the value.
-#' @param rowIDs character. Vector of row identifiers. They will be used to find
+#' @param rowIDs character. Vector of row identifiers that will be used to find
 #'   values that the user has selected. In the output, the component will return
 #'   a named list of values, each name corresponding to the row id, and the
 #'   value - to the value user has selected in this row.
-#' @param rowLLabels character. Vector (or a matrix with one column) of displayed
-#'   labels of the leftmost points of each row. The column name could be displayed
-#'   in the header of the matrix.
-#' @param rowRLabels character. Vector (or a matrix with one column) of displayed
-#'   labels of the rightmost points of each row. The column name could be displayed
-#'   in the header of the matrix. Using this argument is optional. But it allows
-#'   to create Likert scales, potentially with several scales arranged in a matrix.
-#' @param selected either \code{NULL} (default) or a vector of values which
-#'   should be selected when the component is created
-#' @param choiceNames,choiceValues as in radioButtons. Repeated here: List of
-#'   names and values, respectively, that are displayed to the user in the app
-#'   and correspond to the each choice (for this reason, choiceNames and
-#'   choiceValues must have the same length). If either of these arguments is
-#'   provided, then the other must be provided and choices must not be provided.
-#'   The advantage of using both of these over a named list for choices is that
-#'   choiceNames allows any type of UI object to be passed through (tag objects,
-#'   icons, HTML code, ...), instead of just simple text.
-#' @param labelsWidth - vector of two values, NULL by default. Each value can be
-#'   replaced with a character, specifying the minimum (first value) and maximum
-#'   (second value) width of the labels columns. The values are assumed contain
-#'   the width itself and the unit, e.g. "20px", and will be written to the
-#'   \code{style} attribute of the labels \code{td} tags.
+#' @param rowLLabels character. Vector (or a matrix with one column) of labels that 
+#'   displayed in the leftmost point of each row. The column name of the matrix 
+#'   could be displayed in the header of the assignment matrix.
+#' @param rowRLabels character. Vector (or a matrix with one column) of labels that 
+#'   displayed in the rightmost point of each row. The column name of the matrix 
+#'   could be displayed in the header of the assignment matrix. Using this argument 
+#'   is optional. But it allows to create Likert scales, potentially with several 
+#'   scales arranged in a matrix.
+#' @param selected Vector of the initially selected values (if not specified then 
+#'   defaults to \code{NULL}).
+#' @param choiceNames,choiceValues List of names and values, respectively, that 
+#'   are displayed to the user in the app and correspond to the each choice (for 
+#'   this reason, the objects 'choiceNames' and 'choiceValues' must have the 
+#'   same length). If either of these arguments is provided, then the other must 
+#'   be provided and choices must not be provided. The advantage of using both of 
+#'   these over a named list for choices is that the object 'choiceNames' allows 
+#'   any type of UI object to be passed through (tag objects, icons, HTML code, 
+#'   ...), instead of just simple text.
+#' @param labelsWidth List of two valid values of CSS length unit. Each element 
+#'   has to be a properly formatted CSS unit of length (e.g., (like \code{'100\%'},
+#'   \code{'400px'}, \code{'auto'}), specifying the minimum (first value) and 
+#'   maximum (second value) width of the labels columns. The valid elements will 
+#'   be written to the \code{style} attribute of the labels \code{td} tags.
 #' @param session copied from \code{shiny:::generateOptions}
 #'
 #' @keywords internal
@@ -149,37 +156,38 @@ generateRadioMatrix <- function (inputId, rowIDs, rowLLabels, rowRLabels = NULL,
 }
 
 #' @param inputId The input slot that will be used to access the value.
-#' @param rowIDs character. Vector of row identifiers. They will be used to find
+#' @param rowIDs character. Vector of row identifiers that will be used to find
 #'   values that the user has selected. In the output, the component will return
 #'   a named list of values, each name corresponding to the row id, and the
 #'   value - to the value user has selected in this row.
-#' @param rowLLabels character. Vector (or a matrix with one column) of displayed
-#'   labels of the leftmost points of each row. The column name could be displayed
-#'   in the header of the matrix.
-#' @param rowRLabels character. Vector (or a matrix with one column) of displayed
-#'   labels of the rightmost points of each row. The column name could be displayed
-#'   in the header of the matrix. Using this argument is optional. But it allows
-#'   to create Likert scales, potentially with several scales arranged in a matrix.
+#' @param rowLLabels character. Vector (or a matrix with one column) of labels that 
+#'   displayed in the leftmost point of each row. The column name of the matrix 
+#'   could be displayed in the header of the assignment matrix.
+#' @param rowRLabels character. Vector (or a matrix with one column) of labels that 
+#'   displayed in the rightmost point of each row. The column name of the matrix 
+#'   could be displayed in the header of the assignment matrix. Using this argument 
+#'   is optional. But it allows to create Likert scales, potentially with several 
+#'   scales arranged in a matrix.
 #' @param choices List of values to select from (if elements of the list are
 #'   named then that name rather than the value is displayed to the user). If
 #'   this argument is provided, then choiceNames and choiceValues must not be
 #'   provided, and vice-versa. The values should be strings; other types (such
 #'   as logicals and numbers) will be coerced to strings.
-#' @param selected either \code{NULL} (default) or a vector of values which
-#'   should be selected when the component is created
-#' @param choiceNames,choiceValues as in radioButtons. Repeated here: List of
-#'   names and values, respectively, that are displayed to the user in the app
-#'   and correspond to the each choice (for this reason, choiceNames and
-#'   choiceValues must have the same length). If either of these arguments is
-#'   provided, then the other must be provided and choices must not be provided.
-#'   The advantage of using both of these over a named list for choices is that
-#'   choiceNames allows any type of UI object to be passed through (tag objects,
-#'   icons, HTML code, ...), instead of just simple text.
-#' @param labelsWidth - vector of two values, NULL by default. Each value can be
-#'   replaced with a character, specifying the minimum (first value) and maximum
-#'   (second value) width of the labels columns. The values are assumed contain
-#'   the width itself and the unit, e.g. "20px", and will be written to the
-#'   \code{style} attribute of the labels \code{td} tags.
+#' @param selected Vector of the initially selected values (if not specified then 
+#'   defaults to \code{NULL}).
+#' @param choiceNames,choiceValues List of names and values, respectively, that 
+#'   are displayed to the user in the app and correspond to the each choice (for 
+#'   this reason, the objects 'choiceNames' and 'choiceValues' must have the 
+#'   same length). If either of these arguments is provided, then the other must 
+#'   be provided and choices must not be provided. The advantage of using both of 
+#'   these over a named list for choices is that the object 'choiceNames' allows 
+#'   any type of UI object to be passed through (tag objects, icons, HTML code, 
+#'   ...), instead of just simple text.
+#' @param labelsWidth List of two valid values of CSS length unit. Each element 
+#'   has to be a properly formatted CSS unit of length (e.g., (like \code{'100\%'},
+#'   \code{'400px'}, \code{'auto'}), specifying the minimum (first value) and 
+#'   maximum (second value) width of the labels columns. The valid elements will 
+#'   be written to the \code{style} attribute of the labels \code{td} tags.
 #'
 #' @keywords internal
 #'
@@ -191,7 +199,7 @@ validateParams <- function(rowIDs, rowLLabels, rowRLabels, selected, choiceNames
   for (i_i in 1 : length(cv.inv)){
     if (!any((length(get(cv.inv[i_i])) >= 1 && !is.list(get(cv.inv[i_i]))),
              (length(dim(get(cv.inv[i_i]))) == 2 && dim(get(cv.inv[i_i]))[2L] == 1))) {
-      stop(cv.inv[i_i], " must be a a vector or a matrix-like object with at least one column.")
+      stop("'", cv.inv[i_i], "' must be a a vector or a matrix with at least one column.")
     }
   }
 
@@ -220,31 +228,39 @@ validateParams <- function(rowIDs, rowLLabels, rowRLabels, selected, choiceNames
   lengths <- sapply(checks, length)
 
   if (length(unique(lengths)) > 1) {
-    stop("All of rowIDs, rowLabels and selected must be of the same length!")
+    stop("All elements of the object 'rowIDs', 'rowLabels' and 'selected' must be ", 
+         "of the same length!")
   }
 
   if (length(rowIDs) < 1 ){
-    stop("The radio matrix should contain at least one row (i.e. at least one rowID must be specified).")
+    stop("The assignment matrix should contain at least one row. ", 
+         "The object 'rowIDs' has to be a vector with at least one element.")
   }
 
   if(length(unique(rowIDs)) < length(rowIDs)){
-    stop(paste("Some of the rowIDs are not unique! The following values are duplicated:",
-               rowIDs[duplicated(rowIDs)]), ".")
+    stop(paste("Some elements of the object 'rowIDs' are not unique. ",
+               "The following values are duplicated:", rowIDs[duplicated(rowIDs)]), ".")
   }
 
-  if (length(choiceNames) < 2){
-    stop("There should be at least two columns in the radio matrix (i.e. at least two choiceNames specified).")
+  if (length(choiceNames) < 1){
+    stop("There should be at least one columns in the assignment matrix. ",
+         "The object 'choiceNames' has to be a vector with at least one element.")
   }
 
-  if (!is.list(labelsWidth)){
-    stop("labelsWidth must be a list!")
+  if (!(is.list(labelsWidth) & length(labelsWidth) == 2)){
+    stop("The object 'labelsWidth' must be a list with two elements.")
   }
 
+  pattern <-
+    "^(auto|inherit|calc\\(.*\\)|((\\.\\d+)|(\\d+(\\.\\d+)?))(%|in|cm|mm|ch|em|ex|rem|pt|pc|px|vh|vw|vmin|vmax))$"
+  
+  is.cssu <- function(x) (is.character(x) && grepl(pattern, x))
   lwNull <- sapply(labelsWidth, is.null)
-  lwChar <- sapply(labelsWidth, is.character)
-  lwTest <- !(lwNull | lwChar)
+  lwCssU <- sapply(labelsWidth, is.cssu)
+  lwTest <- !(lwNull | lwCssU)
   if (any(lwTest)){
-    stop("labelsWidth can only contain NULLs or characters!")
+    stop("The object 'labelsWidth' can only contain NULLs or ", 
+         "properly formatted CSS units of length!")
   }
 
 }
@@ -253,37 +269,38 @@ validateParams <- function(rowIDs, rowLLabels, rowRLabels, selected, choiceNames
 #' Create radioMatrixInput
 #'
 #' @param inputId The input slot that will be used to access the value.
-#' @param rowIDs character. Vector of row identifiers. They will be used to find
+#' @param rowIDs character. Vector of row identifiers that will be used to find
 #'   values that the user has selected. In the output, the component will return
 #'   a named list of values, each name corresponding to the row id, and the
 #'   value - to the value user has selected in this row.
-#' @param rowLLabels character. Vector (or a matrix with one column) of displayed
-#'   labels of the leftmost points of each row. The column name could be displayed
-#'   in the header of the matrix.
-#' @param rowRLabels character. Vector (or a matrix with one column) of displayed
-#'   labels of the rightmost points of each row. The column name could be displayed
-#'   in the header of the matrix. Using this argument is optional. But it allows
-#'   to create Likert scales, potentially with several scales arranged in a matrix.
+#' @param rowLLabels character. Vector (or a matrix with one column) of labels that 
+#'   displayed in the leftmost point of each row. The column name of the matrix 
+#'   could be displayed in the header of the assignment matrix.
+#' @param rowRLabels character. Vector (or a matrix with one column) of labels that 
+#'   displayed in the rightmost point of each row. The column name of the matrix 
+#'   could be displayed in the header of the assignment matrix. Using this argument 
+#'   is optional. But it allows to create Likert scales, potentially with several 
+#'   scales arranged in a matrix.
 #' @param choices List of values to select from (if elements of the list are
 #'   named then that name rather than the value is displayed to the user). If
 #'   this argument is provided, then choiceNames and choiceValues must not be
 #'   provided, and vice-versa. The values should be strings; other types (such
 #'   as logicals and numbers) will be coerced to strings.
-#' @param selected either \code{NULL} (default) or a vector of values which
-#'   should be selected when the component is created
-#' @param choiceNames,choiceValues as in radioButtons. Repeated here: List of
-#'   names and values, respectively, that are displayed to the user in the app
-#'   and correspond to the each choice (for this reason, choiceNames and
-#'   choiceValues must have the same length). If either of these arguments is
-#'   provided, then the other must be provided and choices must not be provided.
-#'   The advantage of using both of these over a named list for choices is that
-#'   choiceNames allows any type of UI object to be passed through (tag objects,
-#'   icons, HTML code, ...), instead of just simple text.
-#' @param labelsWidth - vector of two values, NULL by default. Each value can be
-#'   replaced with a character, specifying the minimum (first value) and maximum
-#'   (second value) width of the labels columns. The values are assumed contain
-#'   the width itself and the unit, e.g. "20px", and will be written to the
-#'   \code{style} attribute of the labels \code{td} tags.
+#' @param selected Vector of the initially selected values (if not specified then 
+#'   defaults to \code{NULL}).
+#' @param choiceNames,choiceValues List of names and values, respectively, that 
+#'   are displayed to the user in the app and correspond to the each choice (for 
+#'   this reason, the objects 'choiceNames' and 'choiceValues' must have the 
+#'   same length). If either of these arguments is provided, then the other must 
+#'   be provided and choices must not be provided. The advantage of using both of 
+#'   these over a named list for choices is that the object 'choiceNames' allows 
+#'   any type of UI object to be passed through (tag objects, icons, HTML code, 
+#'   ...), instead of just simple text.
+#' @param labelsWidth List of two valid values of CSS length unit. Each element 
+#'   has to be a properly formatted CSS unit of length (e.g., \code{'10\%'},
+#'   \code{'40px'}, \code{'auto'}), specifying the minimum (first value) and 
+#'   maximum (second value) width of the labels columns. The valid elements will 
+#'   be written to the \code{style} attribute of the labels \code{td} tags.
 #'
 #' @return HTML markup for radioMatrixInput
 #'

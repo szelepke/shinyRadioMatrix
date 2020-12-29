@@ -19,19 +19,20 @@ radioMatrixInput(
 \arguments{
 \item{inputId}{The input slot that will be used to access the value.}
 
-\item{rowIDs}{character. Vector of row identifiers. They will be used to find
+\item{rowIDs}{character. Vector of row identifiers that will be used to find
 values that the user has selected. In the output, the component will return
 a named list of values, each name corresponding to the row id, and the
 value - to the value user has selected in this row.}
 
-\item{rowLLabels}{character. Vector (or a matrix with one column) of displayed
-labels of the leftmost points of each row. The column name could be displayed
-in the header of the matrix.}
+\item{rowLLabels}{character. Vector (or a matrix with one column) of labels that 
+displayed in the leftmost point of each row. The column name of the matrix 
+could be displayed in the header of the assignment matrix.}
 
-\item{rowRLabels}{character. Vector (or a matrix with one column) of displayed
-labels of the rightmost points of each row. The column name could be displayed
-in the header of the matrix. Using this argument is optional. But it allows
-to create Likert scales, potentially with several scales arranged in a matrix.}
+\item{rowRLabels}{character. Vector (or a matrix with one column) of labels that 
+displayed in the rightmost point of each row. The column name of the matrix 
+could be displayed in the header of the assignment matrix. Using this argument 
+is optional. But it allows to create Likert scales, potentially with several 
+scales arranged in a matrix.}
 
 \item{choices}{List of values to select from (if elements of the list are
 named then that name rather than the value is displayed to the user). If
@@ -39,23 +40,23 @@ this argument is provided, then choiceNames and choiceValues must not be
 provided, and vice-versa. The values should be strings; other types (such
 as logicals and numbers) will be coerced to strings.}
 
-\item{selected}{either \code{NULL} (default) or a vector of values which
-should be selected when the component is created}
+\item{selected}{Vector of the initially selected values (if not specified then 
+defaults to \code{NULL}).}
 
-\item{choiceNames, choiceValues}{as in radioButtons. Repeated here: List of
-names and values, respectively, that are displayed to the user in the app
-and correspond to the each choice (for this reason, choiceNames and
-choiceValues must have the same length). If either of these arguments is
-provided, then the other must be provided and choices must not be provided.
-The advantage of using both of these over a named list for choices is that
-choiceNames allows any type of UI object to be passed through (tag objects,
-icons, HTML code, ...), instead of just simple text.}
+\item{choiceNames, choiceValues}{List of names and values, respectively, that 
+are displayed to the user in the app and correspond to the each choice (for 
+this reason, the objects 'choiceNames' and 'choiceValues' must have the 
+same length). If either of these arguments is provided, then the other must 
+be provided and choices must not be provided. The advantage of using both of 
+these over a named list for choices is that the object 'choiceNames' allows 
+any type of UI object to be passed through (tag objects, icons, HTML code, 
+...), instead of just simple text.}
 
-\item{labelsWidth}{- vector of two values, NULL by default. Each value can be
-replaced with a character, specifying the minimum (first value) and maximum
-(second value) width of the labels columns. The values are assumed contain
-the width itself and the unit, e.g. "20px", and will be written to the
-\code{style} attribute of the labels \code{td} tags.}
+\item{labelsWidth}{List of two valid values of CSS length unit. Each element 
+has to be a properly formatted CSS unit of length (e.g., \code{'10\%'},
+\code{'40px'}, \code{'auto'}), specifying the minimum (first value) and 
+maximum (second value) width of the labels columns. The valid elements will 
+be written to the \code{style} attribute of the labels \code{td} tags.}
 }
 \value{
 HTML markup for radioMatrixInput
