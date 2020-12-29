@@ -291,17 +291,17 @@ validateParams <- function(rowIDs, rowLLabels, rowRLabels, selected, choiceNames
 #' library(shiny)
 #' library(shinyRadioMatrix)
 #'
-#' data(taxon_list)
-#' data(pft_list)
 #'
 #' ## Only run examples in interactive R sessions
 #' if (interactive()) {
 #'
 #'   ui <- fluidPage(
-#'     radioMatrixInput(inputId = "rmi", rowIDs = taxon_list$Var,
-#'                      rowLLabels = as.matrix(subset(taxon_list, select = "VarName")),
-#'                      choices = pft_list$ID,
-#'                      selected = taxon_list$DefPFT),
+#'
+#'     radioMatrixInput(inputId = "rmi", rowIDs = c("Performance", "Statement A"),
+#'                      rowLLabels = c("Poor", "Agree"),
+#'                      rowRLabels = c("Excellent", "Disagree"),
+#'                      choices = 0:10,
+#'                      selected = rep(5, 2)),
 #'     verbatimTextOutput('debug')
 #'   )
 #'
@@ -312,23 +312,7 @@ validateParams <- function(rowIDs, rowLLabels, rowRLabels, selected, choiceNames
 #'   shinyApp(ui, server)
 #'
 #' }
-#'
-#' ui <- fluidPage(
-#'
-#'   radioMatrixInput(inputId = "rmi", rowIDs = c("Performance", "Statement A"),
-#'                    rowLLabels = c("Poor", "Agree"),
-#'                    rowRLabels = c("Excellent", "Disagree"),
-#'                    choices = 0:10,
-#'                    selected = rep(5, 2)),
-#'   verbatimTextOutput('debug')
-#' )
-#'
-#' server <- function(input, output, session) {
-#'   output$debug <- renderPrint({input$rmi})
-#' }
-#'
-#' shinyApp(ui, server)
-#'
+#' 
 #' @export
 #'
 radioMatrixInput <- function(inputId, rowIDs, rowLLabels, rowRLabels = NULL, choices = NULL,
