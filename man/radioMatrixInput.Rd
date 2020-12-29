@@ -67,11 +67,11 @@ Create radioMatrixInput
 library(shiny)
 library(shinyRadioMatrix)
 
-data(taxon_list)
-data(pft_list)
-
 ## Only run examples in interactive R sessions
 if (interactive()) {
+
+  data(taxon_list)
+  data(pft_list)
 
   ui <- fluidPage(
     radioMatrixInput(inputId = "rmi", rowIDs = taxon_list$Var,
@@ -86,23 +86,23 @@ if (interactive()) {
   }
 
   shinyApp(ui, server)
+}
+if (interactive()) {
+  ui <- fluidPage(
+
+    radioMatrixInput(inputId = "rmi", rowIDs = c("Performance", "Statement A"),
+                      rowLLabels = c("Poor", "Agree"),
+                      rowRLabels = c("Excellent", "Disagree"),
+                      choices = 0:10,
+                      selected = rep(5, 2)),
+    verbatimTextOutput('debug')
+  )
+
+  server <- function(input, output, session) {
+    output$debug <- renderPrint({input$rmi})
+  }
+
+  shinyApp(ui, server)
 
 }
-
-ui <- fluidPage(
-
-  radioMatrixInput(inputId = "rmi", rowIDs = c("Performance", "Statement A"),
-                   rowLLabels = c("Poor", "Agree"),
-                   rowRLabels = c("Excellent", "Disagree"),
-                   choices = 0:10,
-                   selected = rep(5, 2)),
-  verbatimTextOutput('debug')
-)
-
-server <- function(input, output, session) {
-  output$debug <- renderPrint({input$rmi})
-}
-
-shinyApp(ui, server)
-
 }

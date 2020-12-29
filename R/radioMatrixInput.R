@@ -295,6 +295,25 @@ validateParams <- function(rowIDs, rowLLabels, rowRLabels, selected, choiceNames
 #' ## Only run examples in interactive R sessions
 #' if (interactive()) {
 #'
+#'  data(taxon_list)
+#'  data(pft_list)
+#'
+#'  ui <- fluidPage(
+#'    radioMatrixInput(inputId = "rmi", rowIDs = taxon_list$Var,
+#'           rowLLabels = as.matrix(subset(taxon_list, select = "VarName")),
+#'          choices = pft_list$ID,
+#'           selected = taxon_list$DefPFT),
+#'    verbatimTextOutput('debug')
+#'  )
+#'
+#'  server <- function(input, output, session) {
+#'    output$debug <- renderPrint({input$rmi})
+#'  }
+#'
+#'  shinyApp(ui, server)
+#' }
+#' if (interactive()) {
+#'
 #'   ui <- fluidPage(
 #'
 #'     radioMatrixInput(inputId = "rmi", rowIDs = c("Performance", "Statement A"),
