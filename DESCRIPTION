@@ -1,7 +1,7 @@
 Package: shinyRadioMatrix
 Type: Package
-Title: Create a matrix with radio buttons
-Version: 0.1.0
+Title: Create a Matrix with Radio Buttons
+Version: 0.2.0
 Authors@R: 
     c(person("Zsolt", "Szelepcsényi", email = "szelepcsenyi.zsolt@gmail.com", 
              role = c("aut", "cre")),
