@@ -12,7 +12,7 @@ Description: An input controller for R Shiny: a matrix with radio buttons,
     where only one option per row can be selected.
 Imports:
     shiny
-License: GPL-3 | file LICENSE
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
