@@ -13,6 +13,7 @@ radioMatrixInput(
   selected = NULL,
   choiceNames = NULL,
   choiceValues = NULL,
+  rowIDsName = "ID",
   labelsWidth = list(NULL, NULL)
 )
 }
@@ -51,6 +52,9 @@ be provided and choices must not be provided. The advantage of using both of
 these over a named list for choices is that the object 'choiceNames' allows 
 any type of UI object to be passed through (tag objects, icons, HTML code, 
 ...), instead of just simple text.}
+
+\item{rowIDsName}{single character that defines the header of the ID column in the
+input matrix.}
 
 \item{labelsWidth}{List of two valid values of CSS length unit. Each element 
 has to be a properly formatted CSS unit of length (e.g., \code{'10\%'},
@@ -99,6 +103,7 @@ if (interactive()) {
                      rowRLabels = c("Excellent", "Disagree"),
                      choices = 1:5,
                      selected = rep(3, 2),
+                     rowIDsName = "Grade",
                      labelsWidth = list("100px", "100px")),
     verbatimTextOutput('debug02')
   )
