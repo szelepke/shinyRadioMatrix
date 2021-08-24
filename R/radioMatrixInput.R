@@ -77,6 +77,8 @@ generateRadioRow <- function(rowID, rowLLabel, rowRLabel, choiceNames, choiceVal
 #'   could be displayed in the header of the assignment matrix. Using this argument 
 #'   is optional. But it allows to create Likert scales, potentially with several 
 #'   scales arranged in a matrix.
+#' @param rowIDsName single character that defines the header of the ID column in the
+#'   input matrix.
 #'   
 #' @return HTML markup for the header table row
 #'
@@ -84,15 +86,18 @@ generateRadioRow <- function(rowID, rowLLabel, rowRLabel, choiceNames, choiceVal
 #'
 #' @noRd
 #'
-generateRadioMatrixHeader <- function(choiceNames, rowLLabels, rowRLabels){
+generateRadioMatrixHeader <- function(choiceNames, 
+                                      rowLLabels, 
+                                      rowRLabels,
+                                      rowIDsName){
   if(!is.null(rowRLabels)){
     rRName <- ifelse(is.matrix(rowRLabels), colnames(rowRLabels), "")
     rLName <- ifelse(is.matrix(rowLLabels), colnames(rowLLabels), "")
-    header <- lapply(c("ID", rLName, choiceNames, rRName),
+    header <- lapply(c(rowIDsName, rLName, choiceNames, rRName),
                      function(n){ shiny::tags$td(n)})
   } else {
     rLName <- ifelse(is.matrix(rowLLabels), colnames(rowLLabels), "")
-    header <- lapply(c("ID", rLName, choiceNames),
+    header <- lapply(c(rowIDsName, rLName, choiceNames),
                      function(n){ shiny::tags$td(n)})
   }
 
@@ -100,7 +105,7 @@ generateRadioMatrixHeader <- function(choiceNames, rowLLabels, rowRLabels){
 }
 
 
-#' Generate complete HTML markup for radioMatrixIpnut
+#' Generate complete HTML markup for radioMatrixInput
 #'
 #' @param inputId The input slot that will be used to access the value.
 #' @param rowIDs character. Vector of row identifiers that will be used to find
@@ -117,6 +122,8 @@ generateRadioMatrixHeader <- function(choiceNames, rowLLabels, rowRLabels){
 #'   scales arranged in a matrix.
 #' @param selected Vector of the initially selected values (if not specified then 
 #'   defaults to \code{NULL}).
+#' @param rowIDsName single character that defines the header of the ID column in the
+#'   input matrix.
 #' @param choiceNames,choiceValues List of names and values, respectively, that 
 #'   are displayed to the user in the app and correspond to the each choice (for 
 #'   this reason, the objects 'choiceNames' and 'choiceValues' must have the 
@@ -136,18 +143,28 @@ generateRadioMatrixHeader <- function(choiceNames, rowLLabels, rowRLabels){
 #'
 #' @noRd
 #'
-generateRadioMatrix <- function (inputId, rowIDs, rowLLabels, rowRLabels = NULL,
-                                 choiceNames = NULL, choiceValues = NULL,
+generateRadioMatrix <- function (inputId, 
+                                 rowIDs, 
+                                 rowLLabels, 
+                                 rowRLabels = NULL,
+                                 choiceNames = NULL, 
+                                 choiceValues = NULL,
                                  selected = NULL,
+                                 rowIDsName = "ID",
                                  labelsWidth = list(NULL, NULL),
                                  session = shiny::getDefaultReactiveDomain()){
 
-  header <- generateRadioMatrixHeader(choiceNames, rowLLabels, rowRLabels)
+  header <- generateRadioMatrixHeader(choiceNames, rowLLabels, rowRLabels, rowIDsName)
   rows <- lapply(1:length(rowIDs), function(i){
-    generateRadioRow(rowID = rowIDs[[i]], rowLLabel = rowLLabels[[i]], rowRLabel = rowRLabels[[i]],
-                     choiceNames = choiceNames, choiceValues = choiceValues,
-                     selected = if (is.null(selected)) selected else selected[[i]],
-                     labelsWidth = labelsWidth)
+    generateRadioRow(
+      rowID = rowIDs[[i]], 
+      rowLLabel = rowLLabels[[i]], 
+      rowRLabel = rowRLabels[[i]],
+      choiceNames = choiceNames, 
+      choiceValues = choiceValues,
+      selected = if (is.null(selected)) selected else selected[[i]],
+      labelsWidth = labelsWidth
+    )
   })
 
   table <- shiny::tags$table(header, rows)
@@ -183,6 +200,8 @@ generateRadioMatrix <- function (inputId, rowIDs, rowLLabels, rowRLabels = NULL,
 #'   these over a named list for choices is that the object 'choiceNames' allows 
 #'   any type of UI object to be passed through (tag objects, icons, HTML code, 
 #'   ...), instead of just simple text.
+#' @param rowIDsName single character that defines the header of the ID column in the
+#'   input matrix.
 #' @param labelsWidth List of two valid values of CSS length unit. Each element 
 #'   has to be a properly formatted CSS unit of length (e.g., (like \code{'100\%'},
 #'   \code{'400px'}, \code{'auto'}), specifying the minimum (first value) and 
@@ -193,7 +212,13 @@ generateRadioMatrix <- function (inputId, rowIDs, rowLLabels, rowRLabels = NULL,
 #'
 #' @noRd
 #'
-validateParams <- function(rowIDs, rowLLabels, rowRLabels, selected, choiceNames, labelsWidth){
+validateParams <- function(rowIDs, 
+                           rowLLabels, 
+                           rowRLabels, 
+                           selected, 
+                           choiceNames, 
+                           rowIDsName, 
+                           labelsWidth){
 
   cv.inv <- ifelse(!is.null(rowRLabels), c("rowLLabels", "rowRLabels"), c("rowLLabels"))
   for (i_i in 1 : length(cv.inv)){
@@ -250,6 +275,10 @@ validateParams <- function(rowIDs, rowLLabels, rowRLabels, selected, choiceNames
   if (!(is.list(labelsWidth) & length(labelsWidth) == 2)){
     stop("The object 'labelsWidth' must be a list with two elements.")
   }
+  
+  if (!(is.character(rowIDsName) && length(rowIDsName) == 1)){
+    stop("The object 'rowIDsName' must be a character with a single element.")
+  }
 
   pattern <-
     "^(auto|inherit|calc\\(.*\\)|((\\.\\d+)|(\\d+(\\.\\d+)?))(%|in|cm|mm|ch|em|ex|rem|pt|pc|px|vh|vw|vmin|vmax))$"
@@ -296,6 +325,8 @@ validateParams <- function(rowIDs, rowLLabels, rowRLabels, selected, choiceNames
 #'   these over a named list for choices is that the object 'choiceNames' allows 
 #'   any type of UI object to be passed through (tag objects, icons, HTML code, 
 #'   ...), instead of just simple text.
+#' @param rowIDsName single character that defines the header of the ID column in the
+#'   input matrix.
 #' @param labelsWidth List of two valid values of CSS length unit. Each element 
 #'   has to be a properly formatted CSS unit of length (e.g., \code{'10\%'},
 #'   \code{'40px'}, \code{'auto'}), specifying the minimum (first value) and 
@@ -339,6 +370,7 @@ validateParams <- function(rowIDs, rowLLabels, rowRLabels, selected, choiceNames
 #'                      rowRLabels = c("Excellent", "Disagree"),
 #'                      choices = 1:5,
 #'                      selected = rep(3, 2),
+#'                      rowIDsName = "Grade",
 #'                      labelsWidth = list("100px", "100px")),
 #'     verbatimTextOutput('debug02')
 #'   )
@@ -353,21 +385,34 @@ validateParams <- function(rowIDs, rowLLabels, rowRLabels, selected, choiceNames
 #' 
 #' @export
 #'
-radioMatrixInput <- function(inputId, rowIDs, rowLLabels, rowRLabels = NULL, choices = NULL,
-                             selected = NULL, choiceNames = NULL, choiceValues = NULL,
+radioMatrixInput <- function(inputId, 
+                             rowIDs, 
+                             rowLLabels, 
+                             rowRLabels = NULL, 
+                             choices = NULL,
+                             selected = NULL, 
+                             choiceNames = NULL, 
+                             choiceValues = NULL,
+                             rowIDsName = "ID",
                              labelsWidth = list(NULL, NULL)) {
 
   # check the inputs
   args <- eval(parse(text = "shiny:::normalizeChoicesArgs(choices, choiceNames, choiceValues)"))
   selected <- eval(parse(text = "restoreInput(id = inputId, default = selected)"))
-  validateParams(rowIDs, rowLLabels, rowRLabels, selected, args$choiceNames, labelsWidth)
+  validateParams(rowIDs, rowLLabels, rowRLabels, selected, args$choiceNames, rowIDsName, labelsWidth)
 
   # generate the HTML for the controller itself
-  radiomatrix <- generateRadioMatrix(inputId = inputId, rowIDs = rowIDs,
-                                     rowLLabels = rowLLabels, rowRLabels = rowRLabels,
-                                     selected = selected,
-                                     choiceNames = args$choiceNames, choiceValues = args$choiceValues,
-                                     labelsWidth = labelsWidth)
+  radiomatrix <- generateRadioMatrix(
+    inputId = inputId, 
+    rowIDs = rowIDs,
+    rowLLabels = rowLLabels, 
+    rowRLabels = rowRLabels,
+    selected = selected,
+    choiceNames = args$choiceNames, 
+    choiceValues = args$choiceValues,
+    rowIDsName = rowIDsName,
+    labelsWidth = labelsWidth
+  )
 
   divClass <- "form-group shiny-radiomatrix-container dataTable-container"
 
@@ -382,10 +427,10 @@ radioMatrixInput <- function(inputId, rowIDs, rowLLabels, rowRLabels = NULL, cho
 
     ),
 
-    shiny::tags$div(id = inputId,
-                    class = divClass,
-                    radiomatrix
+    shiny::tags$div(
+      id = inputId,
+      class = divClass,
+      radiomatrix
     )
   )
-
 }
