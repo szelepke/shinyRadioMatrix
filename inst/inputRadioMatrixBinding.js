@@ -25,11 +25,13 @@ $.extend(radioMatrixInputBinding, {
 
   setValue: function (el, value) {
     var $rows = $(el).find("tr.shiny-radiomatrix-row");
-    $rows.find("input").removeAttr('checked');  // reset all
+    $rows.find("input").prop("checked", false);  // reset all
 
-    $rows.each(function (index) {
-      $(this).find(`[value='${value[$(this).attr("name")]}']`).attr('checked', true);
+    $rows.each(function () {
+      var val = value[$(this).attr("name")];
+      $(this).find("[value = " + val + "]").prop("checked", true);
     });
+
   },
 
   receiveMessage: function (el, data) {
