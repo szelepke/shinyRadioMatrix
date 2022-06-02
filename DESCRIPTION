@@ -1,12 +1,11 @@
 Package: shinyRadioMatrix
 Type: Package
 Title: Create a Matrix with Radio Buttons
-Version: 0.2.0
-Authors@R: 
-    c(person("Zsolt", "Szelepcsényi", email = "szelepcsenyi.zsolt@gmail.com", 
-             role = c("aut", "cre")),
-      person("Zoltán", "Szelepcsényi", email = "szelepcsenyi.zoltan@gmail.com",
-             role = "aut"))
+Version: 0.2.1
+Authors@R:c(
+    person("Zsolt", "Szelepcsényi", email = "szelepcsenyi.zsolt@gmail.com", role = c("aut", "cre")),
+    person("Zoltán", "Szelepcsényi", email = "szelepcsenyi.zoltan@gmail.com", role = "aut")
+  )
 Maintainer: Zsolt Szelepcsényi <szelepcsenyi.zsolt@gmail.com>
 Description: An input controller for R Shiny: a matrix with radio buttons, 
     where only one option per row can be selected.
