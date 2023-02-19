@@ -382,33 +382,33 @@ validateParams <- function(rowIDs,
 #'   shinyApp(ui, server)
 #'
 #' }
-#' 
+#'
 #' @export
 #'
-radioMatrixInput <- function(inputId, 
-                             rowIDs, 
-                             rowLLabels, 
-                             rowRLabels = NULL, 
+radioMatrixInput <- function(inputId,
+                             rowIDs,
+                             rowLLabels,
+                             rowRLabels = NULL,
                              choices = NULL,
-                             selected = NULL, 
-                             choiceNames = NULL, 
+                             selected = NULL,
+                             choiceNames = NULL,
                              choiceValues = NULL,
                              rowIDsName = "ID",
                              labelsWidth = list(NULL, NULL)) {
 
   # check the inputs
   args <- eval(parse(text = "shiny:::normalizeChoicesArgs(choices, choiceNames, choiceValues)"))
-  selected <- eval(parse(text = "restoreInput(id = inputId, default = selected)"))
+  selected <- eval(parse(text = "shiny::restoreInput(id = inputId, default = selected)"))
   validateParams(rowIDs, rowLLabels, rowRLabels, selected, args$choiceNames, rowIDsName, labelsWidth)
 
   # generate the HTML for the controller itself
   radiomatrix <- generateRadioMatrix(
-    inputId = inputId, 
+    inputId = inputId,
     rowIDs = rowIDs,
-    rowLLabels = rowLLabels, 
+    rowLLabels = rowLLabels,
     rowRLabels = rowRLabels,
     selected = selected,
-    choiceNames = args$choiceNames, 
+    choiceNames = args$choiceNames,
     choiceValues = args$choiceValues,
     rowIDsName = rowIDsName,
     labelsWidth = labelsWidth
